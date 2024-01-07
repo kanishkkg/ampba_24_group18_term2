@@ -14,12 +14,45 @@ def intro_page():
 # Function to display the survey page
 def survey_page():
     st.header("User Details")
-    mood = st.radio("How's your mood today?", ['Happy', 'Tired', 'Angry'])
-    # You can add more questions here
 
-    if st.button('Submit Survey'):
-        st.success('Survey submitted successfully!')
-        # Process or store the survey data here
+    # Mood question
+    mood = st.radio("How's your mood today?", ['Happy', 'Tired', 'Angry'])
+
+    # Cuisine preference question
+    cuisine_preferences = st.multiselect(
+        "On any given day, which cuisine do you prefer?",
+        ["Italian (like Pizza, Pasta etc.)", 
+         "Japanese (like Sushi, Ramen etc.)", 
+         "Indian (like Curry, Biryani etc.)"]
+    )
+
+    # Food allergy question
+    food_allergies = st.multiselect(
+        "Do you have any food allergies? If yes, then do select all the items you're allergic to",
+        ["Not Allergic to any food item", "Peanut/Tree Nuts", "Seafood", "Dairy"]
+    )
+
+    if st.button('Next - Food Ratings'):
+        st.session_state.page = 3
+
+# Function to display the food ratings page
+def food_ratings_page():
+    st.header("Food Ratings")
+    st.write("Select the food item (Food Item 1)")
+    st.write("Please select any random food item which you have tasted. We will be asking for a rating in the next question")
+
+    # Dropdown for selecting a food item
+    food_item = st.selectbox(
+        "Food Item",
+        ["Food1", "Food2", "Food3"]
+    )
+
+    # Rating scale
+    rating = st.slider("Rate the food item on a scale of 1 to 10", 1, 10)
+
+    if st.button('Submit Rating'):
+        st.success(f'You rated {food_item} a {rating} out of 10')
+        # Process or store the rating here
 
 # Main app logic
 if 'page' not in st.session_state:
@@ -27,7 +60,9 @@ if 'page' not in st.session_state:
 
 if st.session_state.page == 1:
     intro_page()
-    if st.button("Next"):
+    if st.button("Next - User Details"):
         st.session_state.page = 2
 elif st.session_state.page == 2:
     survey_page()
+elif st.session_state.page == 3:
+    food_ratings_page()
