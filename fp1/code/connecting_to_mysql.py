@@ -15,7 +15,7 @@ import pymysql
 
 # Database connection parameters
 host = 'localhost'
-user = 'username'
+user = 'root'
 password = 'password'
 db = 'mydatabase'
 
