@@ -1,7 +1,7 @@
 # Database connection parameters
 host = 'localhost'
 user = 'root'
-password = 'Kanishk*786'
+password = 'password'
 db = 'mydatabase'
 
 import urllib.request
@@ -10,22 +10,21 @@ import pandas as pd
 import pymysql
 
 
-
-def sim_user(mood, cuisine_preferences):
+def get_user_id(mood, cuisine_preferences):
     '''
     Function to find similar users as the current user
 
     Parameters
     ----------
     mood : string
-        DESCRIPTION.
+        mood of the user.
     cuisine_preferences : string
-        DESCRIPTION.
+        cuisine.
 
     Returns
     -------
     user_id : int
-        DESCRIPTION.
+        user_id of the similar user.
 
     '''
     # Opening database connection
@@ -52,6 +51,20 @@ def sim_user(mood, cuisine_preferences):
 
 
 def get_food_id(food_list):
+    '''
+    Function to map food name to food id
+
+    Parameters
+    ----------
+    food_list : list
+        list of food names.
+
+    Returns
+    -------
+    food_ids : list
+        list of food ids.
+
+    '''
     # Opening database connection
     connection = pymysql.connect(host=host, user=user, password=password, db=db)
     cursor = connection.cursor()
@@ -78,6 +91,20 @@ def get_food_id(food_list):
     return food_ids
 
 def get_food_details(food_ids):
+    '''
+    Function to get food details from food ids
+
+    Parameters
+    ----------
+    food_ids : list
+        list of food_ids for which details are needed.
+
+    Returns
+    -------
+    details : list
+        food details.
+
+    '''
     # Opening database connection
     connection = pymysql.connect(host=host, user=user, password=password, db=db)
     cursor = connection.cursor()
@@ -165,16 +192,19 @@ def prediction(user_data):
 def postprocessing(user_reco, allergies=[]):
     '''
     Function to remove food recommendations which have allergic
-    ingidients
+    ingridinets and process the output
 
     Parameters
     ----------
     user_reco : pandas DataFrame
         contains the food items which the user was recommended.
+        
+    allergies : list
+        contains ingridients which the user is allergic to
 
     Returns
     -------
-    Final 5 recommendations after removing allergic items
+    Final 3 recommendations after removing allergic items
 
     '''
     
@@ -217,6 +247,19 @@ def postprocessing(user_reco, allergies=[]):
     return final_recs.head(3)
 
 def writeback_to_sql_retraining(survey_response):
+    '''
+    Funciton to writeback to the MySQL database
+
+    Parameters
+    ----------
+    survey_response : pandas DataFrame
+        survey responses at the time of inference
+
+    Returns
+    -------
+    None.
+
+    '''
     # Opening database connection
     connection = pymysql.connect(host=host, user=user, password=password, db=db)
     cursor = connection.cursor()
@@ -240,6 +283,19 @@ def writeback_to_sql_retraining(survey_response):
     cursor.close()
     
 def writeback_fb_data(fb_survey):
+    '''
+    Function to writeback customer's feedback on the recommendations
+
+    Parameters
+    ----------
+    fb_survey : pandas DataFrame
+        feedback of the user on the recommendations.
+
+    Returns
+    -------
+    None.
+
+    '''
     # Opening database connection
     connection = pymysql.connect(host=host, user=user, password=password, db=db)
     cursor = connection.cursor()
