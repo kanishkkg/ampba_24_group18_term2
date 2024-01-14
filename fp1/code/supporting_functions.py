@@ -1,7 +1,7 @@
 # Database connection parameters
 host = 'localhost'
 user = 'root'
-password = 'Kanishk*786'
+password = 'password'
 db = 'mydatabase'
 
 import urllib.request
